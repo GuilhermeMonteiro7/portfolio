@@ -206,18 +206,85 @@
     .col.impacto { grid-column: 1 / -1; }
     .metodo { grid-template-columns: 1fr 1fr; }
   }
+  /* Botão "ver detalhes" existe só no celular */
+  .mais { display: none; }
+
   @media (max-width: 640px) {
+    body { font-size: 15px; }
     .wrap, nav { padding: 0 16px; }
-    nav ul { display: none; }
-    .card { padding: 24px 20px; }
-    .cols, .suporte, .numeros { grid-template-columns: 1fr; }
+
+    /* Fundo mais leve para o celular (menos desfoque = rolagem mais fluida) */
+    .blob { filter: blur(50px); }
+    .b3, .b4 { display: none; }
+    .reveal { filter: none; transform: translateY(24px); }
+    .glass { -webkit-backdrop-filter: blur(12px) saturate(150%); backdrop-filter: blur(12px) saturate(150%); }
+
+    /* Menu: só as iniciais + links curtos */
+    nav { top: 8px; margin-top: 8px; }
+    nav .bar { padding: 6px 6px 6px 8px; }
+    .logo span { display: none; }
+    nav ul { gap: 0; }
+    nav ul a { padding: 8px 12px; font-size: 13px; }
+
+    /* Topo */
+    .hero { padding-block: 36px 56px; gap: 28px; }
+    .eyebrow { font-size: 11px; letter-spacing: .1em; }
+    .hero h1 { font-size: 40px; }
+    .hero .cargo { margin-bottom: 16px; }
+    .hero .frase { font-size: 18px; }
+    .hero .resumo { font-size: 15px; margin-bottom: 22px; }
+    .cta .btn { flex: 1; justify-content: center; }
+    .chips { margin-top: 22px; }
+    .chips li { font-size: 12px; padding: 4px 10px; }
+
+    /* Números do topo */
+    .stats { gap: 12px; }
     .stats .stat:nth-child(2), .stats .stat:nth-child(4),
     .stats .stat.reveal.in:nth-child(2), .stats .stat.reveal.in:nth-child(4) { transform: none; }
-    .stat { padding: 18px 16px; }
+    .stat { padding: 16px 14px; border-radius: 18px; }
+    .stat .num { font-size: 26px; }
+    .stat b { font-size: 14px; line-height: 1.3; }
+    .stat small { display: block; font-size: 12px; line-height: 1.35; margin-top: 4px; }
+
+    /* Seções */
+    section { padding: 24px 0 48px; }
+    .sec-head { margin-bottom: 20px; }
+
+    /* Filtros: uma linha com rolagem lateral */
+    .filtros { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px 20px; padding: 2px 16px; scrollbar-width: none; }
+    .filtros::-webkit-scrollbar { display: none; }
+    .filtros button { flex: none; }
+
+    /* Cards: impacto primeiro, contexto recolhido */
+    .projetos { gap: 18px; }
+    .card { padding: 22px 18px; border-radius: 20px; }
+    .card-head { gap: 10px; margin-bottom: 16px; }
+    .cols, .suporte, .numeros { grid-template-columns: 1fr; }
+    .cols { gap: 16px; }
+    .col.impacto { order: -1; padding: 16px; }
+    .card:not(.aberto) .col:not(.impacto) { display: none; }
+    .mais { display: flex; width: 100%; justify-content: center; margin-top: 14px; }
+    .mais svg { transition: transform .3s var(--ease); }
+    .card.aberto .mais svg { transform: rotate(180deg); }
+    .numeros { gap: 8px; margin-top: 14px; }
+    .numeros div { display: flex; align-items: baseline; gap: 10px; padding: 10px 14px; }
+    .numeros .num { font-size: 20px; }
+    .compare-box .rot { font-size: 11px; top: 8px; padding: 3px 8px; }
+    .compare-box .linha::after { width: 32px; height: 32px; line-height: 32px; font-size: 13px; }
+    .card-foot { margin-top: 18px; gap: 12px; }
     .acoes, .acoes .btn { width: 100%; }
-    .acoes .btn { justify-content: center; }
-    .compare-box { aspect-ratio: 4 / 3; }
-    .compare-box img { object-fit: contain; }
+    .acoes .btn { justify-content: center; padding: 14px 18px; }
+    .acoes [data-modal] { display: none; } /* painel embutido não funciona bem no celular */
+
+    .metodo { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .passo { padding: 18px 16px; }
+    .passo::before { font-size: 26px; margin-bottom: 10px; }
+    .passo h3 { font-size: 17px; }
+    .passo p { font-size: 14px; }
+    .suporte .glass { padding: 20px; }
+
+    footer { padding-bottom: calc(32px + env(safe-area-inset-bottom)); }
+    footer .glass { padding: 22px 20px; }
   }
   @media print {
     .bg, nav, .progress, .filtros, .acoes, .compare { display: none !important; }
@@ -379,6 +446,8 @@
           <div class="col impacto"><h4>Impacto</h4><ul>${p.impacto.map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div>
         </div>
         ${numeros}
+        <button class="btn btn-glass mais" aria-expanded="false">Contexto e o que eu fiz
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
         ${p.comparativo ? comparativo(p.comparativo) : ""}
         <div class="card-foot">
           <div class="tags">${p.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
@@ -407,6 +476,14 @@
       c.hidden = !mostrar;
       if (mostrar) { c.classList.remove("in"); requestAnimationFrame(() => requestAnimationFrame(() => c.classList.add("in"))); }
     });
+  });
+
+  // Celular: abrir/fechar contexto do card
+  $("projetos").addEventListener("click", (e) => {
+    const b = e.target.closest(".mais");
+    if (!b) return;
+    const aberto = b.closest(".card").classList.toggle("aberto");
+    b.setAttribute("aria-expanded", String(aberto));
   });
 
   // Modal com o dashboard embutido
