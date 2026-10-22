@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guilherme Monteiro · Portfólio de Dados</title>
+<meta name="description" content="Portfólio de entregas em Análise de Dados: dashboards Power BI, análises e impacto.">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --text: #39386E;
+    --muted: rgba(57, 56, 110, .72);
+    --accent: #FF8500;
+    --accent-soft: rgba(255, 133, 0, .12);
+    --bg: #F6F6F6;
+    --glass: rgba(255, 255, 255, .55);
+    --glass-strong: rgba(255, 255, 255, .78);
+    --glass-border: rgba(255, 255, 255, .85);
+    --shadow: 0 10px 40px rgba(57, 56, 110, .10), 0 2px 6px rgba(57, 56, 110, .05);
+    --radius: 22px;
+    --ease: cubic-bezier(.2, .7, .2, 1);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+  body { margin: 0; color: var(--text); background: var(--bg);
+         font: 16px/1.65 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; overflow-x: hidden; }
+  h1, h2, h3, .num { font-family: Montserrat, Inter, sans-serif; }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Fundo em gradiente ---------- */
+  .bg { position: fixed; inset: 0; z-index: -1; overflow: hidden;
+        background: linear-gradient(160deg, #F6F6F6 0%, #EFEEF7 45%, #FDF1E4 100%); }
+  .blob { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .55; animation: float 22s ease-in-out infinite; }
+  .b1 { width: 520px; height: 520px; background: #FF8500; top: -160px; right: -120px; opacity: .26; }
+  .b2 { width: 600px; height: 600px; background: #39386E; bottom: -260px; left: -200px; opacity: .22; animation-delay: -7s; }
+  .b3 { width: 380px; height: 380px; background: #FFB766; top: 45%; left: 55%; opacity: .30; animation-delay: -14s; }
+  .b4 { width: 340px; height: 340px; background: #8C8BD6; top: 20%; left: 8%; opacity: .25; animation-delay: -3s; }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -30px) scale(1.06); }
+    66% { transform: translate(-30px, 30px) scale(.95); }
+  }
+
+  /* ---------- Vidro ---------- */
+  .glass { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius);
+           box-shadow: var(--shadow); -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%); }
+
+  /* ---------- Barra de progresso + navegação ---------- */
+  .progress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; z-index: 60; transform-origin: 0 50%;
+              transform: scaleX(0); background: linear-gradient(90deg, var(--accent), #FFB766); }
+  nav { position: sticky; top: 12px; z-index: 50; margin: 12px auto 0; max-width: 1120px; padding: 0 24px; }
+  nav .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 12px 10px 18px; border-radius: 999px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; font-family: Montserrat, sans-serif; }
+  .logo i { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; font-style: normal; font-size: 13px;
+            color: #fff; background: linear-gradient(135deg, var(--text), #5b5aa3); }
+  nav ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+  nav ul a { display: block; padding: 6px 14px; border-radius: 999px; text-decoration: none; font-size: 14px; font-weight: 500; transition: background .25s; }
+  nav ul a:hover { background: var(--accent-soft); color: var(--text); }
+
+  /* ---------- Hero ---------- */
+  .hero { display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center; padding-block: 72px 96px; }
+  .eyebrow { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 14px; }
+  .hero h1 { font-size: clamp(40px, 6vw, 68px); line-height: 1.04; letter-spacing: -.03em; margin: 0 0 10px; font-weight: 800; }
+  .hero .cargo { color: var(--accent); font-family: Montserrat, sans-serif; font-weight: 700; font-size: clamp(18px, 2.2vw, 22px); margin: 0 0 22px; }
+  .hero .frase { font-size: clamp(18px, 2vw, 21px); line-height: 1.5; font-weight: 500; margin: 0 0 14px; }
+  .hero .resumo { color: var(--muted); margin: 0 0 28px; max-width: 560px; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0 0; padding: 0; list-style: none; }
+  .chips li { font-size: 13px; padding: 5px 12px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); }
+
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .stat { padding: 24px 22px; transition: transform .4s var(--ease); }
+  .stat:hover { transform: translateY(-4px); }
+  .stat .num { display: block; color: var(--accent); font-size: clamp(30px, 3.6vw, 40px); font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+  .stat b { display: block; font-size: 15px; margin-top: 6px; }
+  .stat small { color: var(--muted); font-size: 13px; }
+  .stats .stat:nth-child(2) { transform: translateY(24px); }
+  .stats .stat:nth-child(4) { transform: translateY(24px); }
+  .stats .stat:nth-child(2):hover, .stats .stat:nth-child(4):hover { transform: translateY(20px); }
+
+  /* ---------- Botões ---------- */
+  .btn { display: inline-flex; align-items: center; gap: 8px; font: 600 14px/1 Inter, sans-serif; text-decoration: none; cursor: pointer;
+         border-radius: 12px; padding: 12px 18px; border: 1px solid transparent; transition: transform .25s var(--ease), box-shadow .25s, background .25s; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn svg { width: 17px; height: 17px; flex: none; }
+  .btn-dark { background: var(--text); color: #fff; box-shadow: 0 6px 18px rgba(57, 56, 110, .28); }
+  .btn-orange { background: var(--accent); color: var(--text); box-shadow: 0 6px 18px rgba(255, 133, 0, .30); }
+  .btn-glass { background: var(--glass-strong); color: var(--text); border-color: var(--glass-border); }
+  .btn-glass:hover { background: #fff; }
+
+  /* ---------- Seções ---------- */
+  section { padding: 40px 0 72px; }
+  .sec-head { margin-bottom: 28px; }
+  .sec-head h2 { font-size: clamp(28px, 3.6vw, 40px); letter-spacing: -.02em; margin: 0 0 8px; line-height: 1.15; }
+  .sec-head p { color: var(--muted); margin: 0; max-width: 640px; }
+
+  .filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  .filtros button { font: 500 14px/1 Inter, sans-serif; color: var(--text); cursor: pointer; padding: 10px 16px; border-radius: 999px;
+                    background: var(--glass); border: 1px solid var(--glass-border); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); transition: all .25s; }
+  .filtros button[aria-pressed="true"] { background: var(--text); color: #fff; border-color: var(--text); }
+  .filtros button span { opacity: .6; margin-left: 4px; }
+
+  /* ---------- Cards de projeto ---------- */
+  .projetos { display: grid; gap: 28px; }
+  .card { padding: 32px; position: relative; overflow: hidden; transition: box-shadow .4s var(--ease); }
+  .card:hover { box-shadow: 0 18px 60px rgba(57, 56, 110, .16); }
+  .card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: linear-gradient(var(--accent), #FFB766); }
+  .card-head { display: flex; gap: 20px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; margin-bottom: 22px; }
+  .idx { font-family: Montserrat, sans-serif; font-weight: 800; font-size: 14px; color: var(--accent); margin-right: 10px; }
+  .card .area { color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+  .card h3 { font-size: clamp(21px, 2.4vw, 26px); margin: 6px 0 0; letter-spacing: -.01em; line-height: 1.25; }
+  .status { font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 999px; white-space: nowrap;
+            background: rgba(57, 56, 110, .08); border: 1px solid rgba(57, 56, 110, .12); }
+  .status.andamento { background: var(--accent-soft); border-color: rgba(255, 133, 0, .35); }
+  .status.andamento::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+                              margin-right: 7px; vertical-align: 1px; animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .25; } }
+
+  .cols { display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 20px; }
+  .col h4 { margin: 0 0 8px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .col p { margin: 0; }
+  .col ul { margin: 0; padding-left: 18px; }
+  .col li + li { margin-top: 6px; }
+  .col.impacto { background: var(--glass-strong); border: 1px solid var(--glass-border); border-radius: 16px; padding: 18px 20px; }
+  .col.impacto h4 { color: var(--accent); }
+  .col.impacto ul { list-style: none; padding: 0; }
+  .col.impacto li { position: relative; padding-left: 22px; }
+  .col.impacto li::before { content: ""; position: absolute; left: 0; top: .55em; width: 10px; height: 10px; border-radius: 3px;
+                            background: var(--accent); transform: rotate(45deg) scale(.7); }
+
+  .numeros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 22px; }
+  .numeros div { background: var(--glass-strong); border: 1px solid var(--glass-border); border-radius: 14px; padding: 14px 16px; }
+  .numeros .num { display: block; font-size: 24px; font-weight: 800; color: var(--accent); }
+  .numeros small { color: var(--muted); font-size: 13px; }
+
+  /* Comparativo antes/depois */
+  .compare { margin-top: 22px; }
+  .compare-box { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--glass-border);
+                 aspect-ratio: 16 / 9; background: #fff; --pos: 50%; user-select: none; }
+  .compare-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .compare-box .antes { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+  .compare-box .linha { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 3px; margin-left: -1.5px; background: var(--accent); pointer-events: none; }
+  .compare-box .linha::after { content: "‹ ›"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px;
+                               border-radius: 50%; background: var(--accent); color: var(--text); font: 800 16px/40px Montserrat, sans-serif; text-align: center;
+                               box-shadow: 0 4px 14px rgba(0, 0, 0, .2); }
+  .compare-box .rot { position: absolute; top: 12px; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; pointer-events: none;
+                      background: rgba(57, 56, 110, .85); color: #fff; }
+  .compare-box .rot.a { left: 12px; } .compare-box .rot.d { right: 12px; background: var(--accent); color: var(--text); }
+  .compare-box input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
+  .compare p { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
+
+  .card-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-top: 24px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags span { font-size: 12px; padding: 3px 10px; border-radius: 8px; border: 1px solid rgba(57, 56, 110, .15); color: var(--muted); }
+  .acoes { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  /* ---------- Método ---------- */
+  .metodo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; counter-reset: passo; }
+  .passo { padding: 26px 22px; position: relative; }
+  .passo::before { counter-increment: passo; content: "0" counter(passo); display: block; font: 800 34px/1 Montserrat, sans-serif;
+                   color: transparent; -webkit-text-stroke: 1.5px var(--accent); margin-bottom: 14px; }
+  .passo h3 { margin: 0 0 6px; font-size: 19px; }
+  .passo p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  /* ---------- Suporte ---------- */
+  .suporte { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .suporte .glass { padding: 26px; }
+  .suporte h3 { margin: 0 0 8px; font-size: 19px; }
+  .suporte p, .suporte ul { margin: 0; color: var(--muted); }
+  .suporte ul { padding-left: 18px; }
+
+  footer { padding-block: 28px 48px; }
+  footer .glass { padding: 28px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+  footer h2 { margin: 0; font-size: 22px; }
+  footer p { margin: 2px 0 0; color: var(--muted); }
+
+  /* ---------- Modal do dashboard ---------- */
+  dialog { width: min(1200px, 94vw); max-height: 92vh; padding: 0; border: none; border-radius: var(--radius); background: transparent; color: var(--text); }
+  dialog::backdrop { background: rgba(57, 56, 110, .35); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+  dialog .glass { background: var(--glass-strong); padding: 16px; }
+  dialog header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 6px 14px; }
+  dialog h3 { margin: 0; font-size: 18px; }
+  dialog iframe { display: block; width: 100%; aspect-ratio: 16 / 9.3; border: 0; border-radius: 12px; background: #fff; }
+  .x { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--glass-border); background: #fff; cursor: pointer; font-size: 20px; color: var(--text); }
+
+  /* ---------- Motion: revelar ao rolar ---------- */
+  .reveal { opacity: 0; transform: translateY(40px) scale(.98); filter: blur(6px);
+            transition: opacity .9s var(--ease), transform .9s var(--ease), filter .9s var(--ease); transition-delay: var(--d, 0s); }
+  .reveal.in { opacity: 1; transform: none; filter: none; }
+  .stats .stat.reveal.in:nth-child(2), .stats .stat.reveal.in:nth-child(4) { transform: translateY(24px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .blob, .status.andamento::before { animation: none; }
+    .reveal { opacity: 1; transform: none; filter: none; transition: none; }
+  }
+
+  /* ---------- Responsivo ---------- */
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; padding-block: 48px 72px; gap: 40px; }
+    .cols { grid-template-columns: 1fr 1fr; }
+    .col.impacto { grid-column: 1 / -1; }
+    .metodo { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .wrap, nav { padding: 0 16px; }
+    nav ul { display: none; }
+    .card { padding: 24px 20px; }
+    .cols, .suporte, .numeros { grid-template-columns: 1fr; }
+    .stats .stat:nth-child(2), .stats .stat:nth-child(4),
+    .stats .stat.reveal.in:nth-child(2), .stats .stat.reveal.in:nth-child(4) { transform: none; }
+    .stat { padding: 18px 16px; }
+    .acoes, .acoes .btn { width: 100%; }
+    .acoes .btn { justify-content: center; }
+    .compare-box { aspect-ratio: 4 / 3; }
+    .compare-box img { object-fit: contain; }
+  }
+  @media print {
+    .bg, nav, .progress, .filtros, .acoes, .compare { display: none !important; }
+    .reveal { opacity: 1; transform: none; filter: none; }
+    .card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<nav>
+  <div class="bar glass">
+    <a class="logo" href="#topo"><i id="iniciais"></i><span id="nav-nome"></span></a>
+    <ul>
+      <li><a href="#entregas">Entregas</a></li>
+      <li><a href="#metodo">Método</a></li>
+      <li><a href="#suporte">Apoio</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="wrap hero" id="topo">
+  <div>
+    <p class="eyebrow reveal" id="eyebrow"></p>
+    <h1 class="reveal" style="--d:.08s" id="nome"></h1>
+    <p class="cargo reveal" style="--d:.16s" id="cargo"></p>
+    <p class="frase reveal" style="--d:.24s" id="frase"></p>
+    <p class="resumo reveal" style="--d:.32s" id="resumo"></p>
+    <div class="cta reveal" style="--d:.4s">
+      <a class="btn btn-dark" href="#entregas">Ver entregas
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></a>
+      <a class="btn btn-glass" href="#metodo">Como eu trabalho</a>
+    </div>
+    <ul class="chips reveal" style="--d:.48s" id="ferramentas"></ul>
+  </div>
+  <div class="stats" id="destaques" aria-label="Números de destaque"></div>
+</header>
+
+<main class="wrap">
+  <section id="entregas" aria-labelledby="t-entregas">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Portfólio</p>
+      <h2 id="t-entregas">Entregas e impacto</h2>
+      <p>Cada entrega traz o contexto, o que eu fiz e o impacto gerado — com o painel publicado e, quando houver, o relatório completo em PDF.</p>
+    </div>
+    <div class="filtros reveal" id="filtros" role="group" aria-label="Filtrar entregas"></div>
+    <div class="projetos" id="projetos"></div>
+  </section>
+
+  <section id="metodo" aria-labelledby="t-metodo">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Método</p>
+      <h2 id="t-metodo">Como eu trabalho</h2>
+      <p>O mesmo processo se repetiu em todas as entregas, do primeiro alinhamento à documentação final.</p>
+    </div>
+    <div class="metodo" id="lista-metodo"></div>
+  </section>
+
+  <section id="suporte" aria-labelledby="t-suporte">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Além dos dashboards</p>
+      <h2 id="t-suporte">Apoio às equipes</h2>
+    </div>
+    <div class="suporte" id="lista-suporte"></div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="glass reveal">
+    <div><h2 id="rodape-nome"></h2><p id="rodape-sub"></p></div>
+    <div class="acoes" id="contato"></div>
+  </div>
+</footer>
+
+<dialog id="modal" aria-labelledby="modal-titulo">
+  <div class="glass">
+    <header>
+      <h3 id="modal-titulo"></h3>
+      <div class="acoes">
+        <a class="btn btn-glass" id="modal-link" target="_blank" rel="noopener">Abrir em nova aba</a>
+        <button class="x" id="modal-fechar" aria-label="Fechar">×</button>
+      </div>
+    </header>
+    <iframe id="modal-frame" title="Dashboard Power BI" allowfullscreen></iframe>
+  </div>
+</dialog>
+
+<script src="dados.js"></script>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const fmt = (n) => n.toLocaleString("pt-BR");
+  const ICON = {
+    dash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>',
+    pdf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M9 14h6M9 17h4"/></svg>',
+    eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  };
+
+  // ---------- Perfil ----------
+  const iniciais = PERFIL.nome.split(" ").map((p) => p[0]).slice(0, 2).join("");
+  $("iniciais").textContent = iniciais;
+  $("nav-nome").textContent = PERFIL.nome;
+  $("eyebrow").textContent = `${PERFIL.empresa} · ${PERFIL.area}`;
+  $("nome").textContent = PERFIL.nome;
+  $("cargo").textContent = PERFIL.cargo;
+  $("frase").textContent = PERFIL.frase;
+  $("resumo").textContent = PERFIL.resumo;
+  $("ferramentas").innerHTML = PERFIL.ferramentas.map((f) => `<li>${esc(f)}</li>`).join("");
+  $("rodape-nome").textContent = PERFIL.nome;
+  $("rodape-sub").textContent = `${PERFIL.cargo} · ${PERFIL.empresa}`;
+  $("contato").innerHTML = [
+    PERFIL.email && `<a class="btn btn-dark" href="mailto:${esc(PERFIL.email)}">E-mail</a>`,
+    PERFIL.linkedin && `<a class="btn btn-glass" href="${esc(PERFIL.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>`,
+    `<a class="btn btn-glass" href="#topo">Voltar ao topo ↑</a>`,
+  ].filter(Boolean).join("");
+
+  $("destaques").innerHTML = DESTAQUES.map((d, i) => `
+    <div class="stat glass reveal" style="--d:${0.15 + i * 0.1}s">
+      <span class="num" data-count="${d.valor}">0</span>
+      <b>${esc(d.rotulo)}</b><small>${esc(d.nota)}</small>
+    </div>`).join("");
+
+  // ---------- Projetos ----------
+  function comparativo(c) {
+    return `
+      <div class="compare">
+        <div class="compare-box">
+          <img src="${esc(c.depois)}" alt="Depois" loading="lazy">
+          <img class="antes" src="${esc(c.antes)}" alt="Antes" loading="lazy">
+          <span class="linha"></span><span class="rot a">Antes</span><span class="rot d">Depois</span>
+          <input type="range" min="0" max="100" value="50" aria-label="Comparar antes e depois">
+        </div>
+        <p>${esc(c.legenda)}</p>
+      </div>`;
+  }
+
+  function card(p, i) {
+    const acoes = [
+      p.dashboard && `<a class="btn btn-dark" href="${esc(p.dashboard)}" target="_blank" rel="noopener">${ICON.dash} Abrir dashboard</a>`,
+      p.dashboard && `<button class="btn btn-glass" data-modal="${i}">${ICON.eye} Ver aqui</button>`,
+      p.relatorio && `<a class="btn btn-orange" href="${esc(p.relatorio)}" target="_blank" rel="noopener">${ICON.pdf} Relatório em PDF</a>`,
+    ].filter(Boolean).join("");
+    const numeros = p.numeros ? `<div class="numeros">${p.numeros.map((n) =>
+      `<div><span class="num">${esc(n.valor)}</span><small>${esc(n.rotulo)}</small></div>`).join("")}</div>` : "";
+    return `
+      <article class="card glass reveal" data-cat="${esc(p.categoria)}">
+        <div class="card-head">
+          <div>
+            <span class="idx">${String(i + 1).padStart(2, "0")}</span><span class="area">${esc(p.area)}</span>
+            <h3>${esc(p.titulo)}</h3>
+          </div>
+          <span class="status ${/andamento/i.test(p.status) ? "andamento" : ""}">${esc(p.status)}</span>
+        </div>
+        <div class="cols">
+          <div class="col"><h4>Contexto</h4><p>${esc(p.contexto)}</p></div>
+          <div class="col"><h4>O que eu fiz</h4><ul>${p.fiz.map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div>
+          <div class="col impacto"><h4>Impacto</h4><ul>${p.impacto.map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div>
+        </div>
+        ${numeros}
+        ${p.comparativo ? comparativo(p.comparativo) : ""}
+        <div class="card-foot">
+          <div class="tags">${p.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
+          <div class="acoes">${acoes}</div>
+        </div>
+      </article>`;
+  }
+  $("projetos").innerHTML = PROJETOS.map(card).join("");
+
+  // Slider antes/depois
+  document.querySelectorAll(".compare-box input").forEach((inp) => {
+    inp.addEventListener("input", () => inp.parentElement.style.setProperty("--pos", inp.value + "%"));
+  });
+
+  // Filtro por categoria
+  const cats = [["todos", "Todas"], ...Object.entries(CATEGORIAS)];
+  const contar = (k) => (k === "todos" ? PROJETOS.length : PROJETOS.filter((p) => p.categoria === k).length);
+  $("filtros").innerHTML = cats.map(([k, nome], i) =>
+    `<button data-cat="${k}" aria-pressed="${i === 0}">${esc(nome)}<span>${contar(k)}</span></button>`).join("");
+  $("filtros").addEventListener("click", (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    $("filtros").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    document.querySelectorAll(".card").forEach((c) => {
+      const mostrar = b.dataset.cat === "todos" || c.dataset.cat === b.dataset.cat;
+      c.hidden = !mostrar;
+      if (mostrar) { c.classList.remove("in"); requestAnimationFrame(() => requestAnimationFrame(() => c.classList.add("in"))); }
+    });
+  });
+
+  // Modal com o dashboard embutido
+  const modal = $("modal");
+  $("projetos").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-modal]");
+    if (!b) return;
+    const p = PROJETOS[b.dataset.modal];
+    $("modal-titulo").textContent = p.titulo;
+    $("modal-link").href = p.dashboard;
+    $("modal-frame").src = p.dashboard;
+    modal.showModal();
+  });
+  const fechar = () => { modal.close(); };
+  $("modal-fechar").addEventListener("click", fechar);
+  modal.addEventListener("click", (e) => { if (e.target === modal) fechar(); });
+  modal.addEventListener("close", () => { $("modal-frame").src = "about:blank"; });
+
+  // ---------- Método e apoio ----------
+  $("lista-metodo").innerHTML = METODO.map((m, i) =>
+    `<div class="passo glass reveal" style="--d:${i * 0.1}s"><h3>${esc(m.titulo)}</h3><p>${esc(m.texto)}</p></div>`).join("");
+  $("lista-suporte").innerHTML = SUPORTE.map((s, i) => `
+    <div class="glass reveal" style="--d:${i * 0.1}s">
+      <h3>${esc(s.titulo)}</h3>
+      ${s.texto ? `<p>${esc(s.texto)}</p>` : ""}
+      ${s.itens ? `<ul>${s.itens.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+    </div>`).join("");
+
+  // ---------- Motion ----------
+  const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function contarAte(el) {
+    const alvo = Number(el.dataset.count);
+    if (reduz) { el.textContent = fmt(alvo); return; }
+    const t0 = performance.now(), dur = 1600;
+    const passo = (t) => {
+      const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = fmt(Math.round(alvo * e));
+      if (k < 1) requestAnimationFrame(passo);
+    };
+    requestAnimationFrame(passo);
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      en.target.classList.add("in");
+      en.target.querySelectorAll("[data-count]").forEach(contarAte);
+      io.unobserve(en.target);
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+
+  // Barra de progresso de leitura
+  const barra = $("progress");
+  const atualiza = () => {
+    const h = document.documentElement.scrollHeight - innerHeight;
+    barra.style.transform = `scaleX(${h > 0 ? scrollY / h : 0})`;
+  };
+  addEventListener("scroll", atualiza, { passive: true });
+  atualiza();
+</script>
+</body>
+</html>
